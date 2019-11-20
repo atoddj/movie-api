@@ -21,6 +21,7 @@ app.get('/',(req,res) => {
 })
 
 app.use('/requests', routes.requests);
+app.use('/search', routes.search);
 
 connectDb().then(async () => {
     app.listen(process.env.PORT, () => {
