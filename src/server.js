@@ -22,7 +22,7 @@ app.get('/',(req,res) => {
 
 app.use('/requests', routes.requests);
 app.use('/search', routes.search);
-app.use('/auth', routes.session)
+app.use('/auth', routes.session);
 
 connectDb().then(async () => {
     app.listen(process.env.PORT, () => {
