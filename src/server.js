@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import models, {connectDb} from './models';
+import models, {connectDb, connectSql} from './models';
 import routes from './routes';
 import 'dotenv/config';
 
@@ -11,7 +11,8 @@ app.use(express.urlencoded({extended: true}));
 
 app.use(async (req, res, next) => {
     req.context = {
-      models
+      models,
+      connectSql
     };
     next();
   });
@@ -23,6 +24,7 @@ app.get('/',(req,res) => {
 app.use('/requests', routes.requests);
 app.use('/search', routes.search);
 app.use('/auth', routes.session);
+app.use('/plex/latest', routes.latest);
 
 connectDb().then(async () => {
     app.listen(process.env.PORT, () => {
