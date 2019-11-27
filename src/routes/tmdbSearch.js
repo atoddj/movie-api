@@ -12,9 +12,20 @@ router.get('/', async (req, res) => {
             }
         });
         let returnedResponse = await Promise.all(tmdbRes.data.results.map(async (tmdb) => {
-            let found = await req.context.models.Request.findOne({_id: tmdb.id});
-            if (found) {
-                return {...tmdb, status: found.status}
+            let pendingMatch = await req.context.models.Request.findOne({_id: tmdb.id});
+            let plexDb;
+            if (tmdb.title) {
+                plexDb= req.context.connectSql();
+                const stmt = plexDb.prepare(`SELECT title FROM metadata_items
+                WHERE title = ? AND year = ?`);
+                const year = Number(new Date(tmdb.release_date).getFullYear());
+                let availableMatch = stmt.get(tmdb.title, year);
+                if (availableMatch) {    
+                    return {...tmdb, status: 'Available'}
+                }
+            }
+            if (pendingMatch) {
+                return {...tmdb, status: pendingMatch.status}
             }
             return tmdb;
         }));
