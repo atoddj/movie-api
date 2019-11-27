@@ -20,6 +20,7 @@ router.get('/', async (req, res) => {
                 WHERE title = ? AND year = ?`);
                 const year = Number(new Date(tmdb.release_date).getFullYear());
                 let availableMatch = stmt.get(tmdb.title, year);
+                plexDb.close();
                 if (availableMatch) {    
                     return {...tmdb, status: 'Available'}
                 }
