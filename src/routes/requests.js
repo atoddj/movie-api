@@ -13,4 +13,17 @@ router.get('/', async (req, res) => {
     return res.send(requests);
 });
 
+router.post('/', async (req, res) => {
+    const request = req.body;
+    const newRequest = await req.context.models.Request.create({
+        _id: request.id,
+        movie_name: request.title,
+        year: new Date(request.release_date).getFullYear(),
+        status: 'pending',
+        timestamp: new Date(),
+        mediatype: request.media_type
+    });
+    return res.send({success: true, status: newRequest.status});
+})
+
 export default router;
