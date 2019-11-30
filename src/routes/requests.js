@@ -24,6 +24,29 @@ router.post('/', async (req, res) => {
         mediatype: request.media_type
     });
     return res.send({success: true, status: newRequest.status});
+});
+
+router.get('/update', async (req, res) => {
+    res.status(200);
+    let requests = await req.context.models.Request.find({status: 'pending'});
+    let found = []
+    requests.forEach((r) => {
+        let plexDb = req.context.connectSql();
+        const stmt = plexDb.prepare(`SELECT title FROM metadata_items
+        WHERE title = ? AND year = ?`);
+        let availableMatch = stmt.get(r.movie_name, r.year);
+        plexDb.close();
+        if (availableMatch) {
+            r.status = 'complete';
+            r.save();
+            found = [...found, availableMatch];
+        }
+    });
+    if (found.length > 0) {   
+        return res.send(found);
+    } else {
+        return res.send({message: 'no updates', status: 'complete'});
+    }
 })
 
 export default router;
