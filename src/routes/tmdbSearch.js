@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
                 let availableMatch = stmt.get(tmdb.name, year);
                 if (availableMatch) {
                     stmt = plexDb.prepare(`SELECT [index] FROM metadata_items WHERE parent_id = ?`);
-                    let seasons = stmt.all(availableMatch.id).map(s => (s.index)).sort();
+                    let seasons = stmt.all(availableMatch.id).map(s => (s.index)).sort((a,b) => (a-b));
                     plexDb.close();
                     return {...tmdb, status: 'Available', seasons}
                 } else {
