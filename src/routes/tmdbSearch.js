@@ -25,6 +25,20 @@ router.get('/', async (req, res) => {
                     return {...tmdb, status: 'Available'}
                 }
             }
+            if (tmdb.name) {
+                plexDb = req.context.connectSql();
+                let stmt = plexDb.prepare(`SELECT title, id, [index] FROM metadata_items WHERE title = ? AND year = ?`);
+                const year = Number(new Date(tmdb.first_air_date).getFullYear());
+                let availableMatch = stmt.get(tmdb.name, year);
+                if (availableMatch) {
+                    stmt = plexDb.prepare(`SELECT [index] FROM metadata_items WHERE parent_id = ?`);
+                    let seasons = stmt.all(availableMatch.id).map(s => (s.index)).sort();
+                    plexDb.close();
+                    return {...tmdb, status: 'Available', seasons}
+                } else {
+                    plexDb.close();
+                }
+            }
             if (pendingMatch) {
                 return {...tmdb, status: pendingMatch.status}
             }
