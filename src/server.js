@@ -17,14 +17,14 @@ app.use(async (req, res, next) => {
     next();
   });
 
-app.get('/',(req,res) => {
+app.get('/api',(req,res) => {
     res.status(200).send({success: true})
 })
 
-app.use('/requests', routes.requests);
-app.use('/search', routes.search);
-app.use('/auth', routes.session);
-app.use('/plex/latest', routes.latest);
+app.use('/api/requests', routes.requests);
+app.use('/api/search', routes.search);
+app.use('/api/auth', routes.session);
+app.use('/api/plex/latest', routes.latest);
 
 connectDb().then(async () => {
     app.listen(process.env.PORT, () => {

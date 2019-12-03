@@ -40,15 +40,15 @@ app.use(function _callee(req, res, next) {
     }
   });
 });
-app.get('/', function (req, res) {
+app.get('/api', function (req, res) {
   res.status(200).send({
     success: true
   });
 });
-app.use('/requests', _routes["default"].requests);
-app.use('/search', _routes["default"].search);
-app.use('/auth', _routes["default"].session);
-app.use('/plex/latest', _routes["default"].latest);
+app.use('/api/requests', _routes["default"].requests);
+app.use('/api/search', _routes["default"].search);
+app.use('/api/auth', _routes["default"].session);
+app.use('/api/plex/latest', _routes["default"].latest);
 (0, _models.connectDb)().then(function _callee2() {
   return _regenerator["default"].async(function _callee2$(_context2) {
     while (1) {
