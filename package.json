@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node src/server.js",
-    "serve": "node dist/server.js",
+    "serve": "pm2 start dist/server.js",
     "build": "babel src --out-dir dist"
   },
   "repository": {
