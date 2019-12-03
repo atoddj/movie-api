@@ -1,5 +1,7 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -12,8 +14,6 @@ var _betterSqlite = _interopRequireDefault(require("better-sqlite3"));
 require("dotenv/config");
 
 var _request = _interopRequireDefault(require("./request"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var connectDb = function connectDb() {
   return _mongoose["default"].connect(process.env.DATABASE_URL, {

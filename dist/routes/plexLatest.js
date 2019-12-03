@@ -1,23 +1,25 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 
-var _express = _interopRequireDefault(require("express"));
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+var _express = _interopRequireDefault(require("express"));
 
 var router = (0, _express["default"])();
 router.get('/', function _callee(req, res) {
   var db;
-  return regeneratorRuntime.async(function _callee$(_context) {
+  return _regenerator["default"].async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
-          return regeneratorRuntime.awrap(req.context.connectSql());
+          return _regenerator["default"].awrap(req.context.connectSql());
 
         case 2:
           db = _context.sent;

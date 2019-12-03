@@ -1,5 +1,7 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -12,8 +14,6 @@ var _tmdbSearch = _interopRequireDefault(require("./tmdbSearch"));
 var _session = _interopRequireDefault(require("./session"));
 
 var _plexLatest = _interopRequireDefault(require("./plexLatest"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 // import session from './session';
 var _default = {

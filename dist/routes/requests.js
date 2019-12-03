@@ -1,24 +1,22 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
 var _express = require("express");
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 var router = (0, _express.Router)();
 router.get('/', function _callee(req, res) {
   var requests;
-  return regeneratorRuntime.async(function _callee$(_context) {
+  return _regenerator["default"].async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
@@ -30,7 +28,7 @@ router.get('/', function _callee(req, res) {
           }
 
           _context.next = 4;
-          return regeneratorRuntime.awrap(req.context.models.Request.find(req.query));
+          return _regenerator["default"].awrap(req.context.models.Request.find(req.query));
 
         case 4:
           requests = _context.sent;
@@ -39,7 +37,7 @@ router.get('/', function _callee(req, res) {
 
         case 7:
           _context.next = 9;
-          return regeneratorRuntime.awrap(req.context.models.Request.find());
+          return _regenerator["default"].awrap(req.context.models.Request.find());
 
         case 9:
           requests = _context.sent;
@@ -56,13 +54,13 @@ router.get('/', function _callee(req, res) {
 });
 router.post('/', function _callee2(req, res) {
   var request, newRequest;
-  return regeneratorRuntime.async(function _callee2$(_context2) {
+  return _regenerator["default"].async(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
           request = req.body;
           _context2.next = 3;
-          return regeneratorRuntime.awrap(req.context.models.Request.create({
+          return _regenerator["default"].awrap(req.context.models.Request.create({
             _id: request.id,
             movie_name: request.title,
             year: new Date(request.release_date).getFullYear(),
@@ -87,13 +85,13 @@ router.post('/', function _callee2(req, res) {
 });
 router.get('/update', function _callee3(req, res) {
   var requests, found;
-  return regeneratorRuntime.async(function _callee3$(_context3) {
+  return _regenerator["default"].async(function _callee3$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
           res.status(200);
           _context3.next = 3;
-          return regeneratorRuntime.awrap(req.context.models.Request.find({
+          return _regenerator["default"].awrap(req.context.models.Request.find({
             status: 'pending'
           }));
 
@@ -109,7 +107,7 @@ router.get('/update', function _callee3(req, res) {
             if (availableMatch) {
               r.status = 'complete';
               r.save();
-              found = [].concat(_toConsumableArray(found), [availableMatch]);
+              found = [].concat((0, _toConsumableArray2["default"])(found), [availableMatch]);
             }
           });
 
@@ -135,7 +133,7 @@ router.get('/update', function _callee3(req, res) {
 });
 router["delete"]('/:id', function _callee4(req, res) {
   var isLoggedIn, idToDelete, deleted;
-  return regeneratorRuntime.async(function _callee4$(_context4) {
+  return _regenerator["default"].async(function _callee4$(_context4) {
     while (1) {
       switch (_context4.prev = _context4.next) {
         case 0:
@@ -148,7 +146,7 @@ router["delete"]('/:id', function _callee4(req, res) {
           }
 
           _context4.next = 5;
-          return regeneratorRuntime.awrap(req.context.models.Request.deleteOne({
+          return _regenerator["default"].awrap(req.context.models.Request.deleteOne({
             _id: idToDelete
           }));
 

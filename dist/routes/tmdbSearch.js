@@ -1,26 +1,28 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
 var _express = _interopRequireDefault(require("express"));
 
 var _axios = _interopRequireDefault(require("axios"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 var router = (0, _express["default"])();
 router.get('/', function _callee2(req, res) {
   var tmdbRes, returnedResponse;
-  return regeneratorRuntime.async(function _callee2$(_context2) {
+  return _regenerator["default"].async(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
@@ -30,7 +32,7 @@ router.get('/', function _callee2(req, res) {
           }
 
           _context2.next = 3;
-          return regeneratorRuntime.awrap(_axios["default"].get(process.env.TMDB_SEARCH_URL, {
+          return _regenerator["default"].awrap(_axios["default"].get(process.env.TMDB_SEARCH_URL, {
             params: {
               api_key: process.env.TMDB_API_KEY,
               query: req.query.q
@@ -40,15 +42,15 @@ router.get('/', function _callee2(req, res) {
         case 3:
           tmdbRes = _context2.sent;
           _context2.next = 6;
-          return regeneratorRuntime.awrap(Promise.all(tmdbRes.data.results.map(function _callee(tmdb) {
+          return _regenerator["default"].awrap(Promise.all(tmdbRes.data.results.map(function _callee(tmdb) {
             var pendingMatch, plexDb, stmt, year, availableMatch, _stmt, _year, _availableMatch, seasons;
 
-            return regeneratorRuntime.async(function _callee$(_context) {
+            return _regenerator["default"].async(function _callee$(_context) {
               while (1) {
                 switch (_context.prev = _context.next) {
                   case 0:
                     _context.next = 2;
-                    return regeneratorRuntime.awrap(req.context.models.Request.findOne({
+                    return _regenerator["default"].awrap(req.context.models.Request.findOne({
                       _id: tmdb.id
                     }));
 
