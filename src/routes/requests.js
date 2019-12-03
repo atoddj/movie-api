@@ -47,6 +47,21 @@ router.get('/update', async (req, res) => {
     } else {
         return res.send({message: 'no updates', status: 'complete'});
     }
+});
+
+router.delete('/:id', async (req, res) => {
+    const isLoggedIn = req.query.admin === process.env.ADMIN_TOKEN;
+    const idToDelete = req.params.id;
+    if (isLoggedIn) {
+        const deleted = await req.context.models.Request.deleteOne({_id: idToDelete});
+        if (deleted.deletedCount === 1) {
+            return res.send({deleted: true, message: `deleted entry where _id = ${idToDelete}`});
+        } else {
+            return res.send({status: 'ERROR', message: `id ${idToDelete} not found in database`, deleted: false});
+        }
+    } else {
+        return res.send({status: 'ERROR', message: 'Authentication failed'});
+    }
 })
 
 export default router;
