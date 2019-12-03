@@ -12,7 +12,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 var RequestSchema = new _mongoose["default"].Schema({
   _id: String,
   movie_name: String,
-  url: String,
   year: String,
   status: String,
   timestamp: Object,

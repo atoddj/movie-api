@@ -3,9 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.connectDb = void 0;
+exports["default"] = exports.connectSql = exports.connectDb = void 0;
 
 var _mongoose = _interopRequireDefault(require("mongoose"));
+
+var _betterSqlite = _interopRequireDefault(require("better-sqlite3"));
 
 require("dotenv/config");
 
@@ -21,6 +23,12 @@ var connectDb = function connectDb() {
 };
 
 exports.connectDb = connectDb;
+
+var connectSql = function connectSql() {
+  return new _betterSqlite["default"](process.env.PLEX_DB_PATH);
+};
+
+exports.connectSql = connectSql;
 var models = {
   Request: _request["default"]
 };

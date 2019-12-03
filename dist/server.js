@@ -30,7 +30,8 @@ app.use(function _callee(req, res, next) {
       switch (_context.prev = _context.next) {
         case 0:
           req.context = {
-            models: _models["default"]
+            models: _models["default"],
+            connectSql: _models.connectSql
           };
           next();
 
@@ -47,6 +48,9 @@ app.get('/', function (req, res) {
   });
 });
 app.use('/requests', _routes["default"].requests);
+app.use('/search', _routes["default"].search);
+app.use('/auth', _routes["default"].session);
+app.use('/plex/latest', _routes["default"].latest);
 (0, _models.connectDb)().then(function _callee2() {
   return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
