@@ -50,7 +50,7 @@ router.get('/update', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-    const isLoggedIn = req.query.admin === process.env.ADMIN_TOKEN;
+    const isLoggedIn = req.body.admin === process.env.ADMIN_TOKEN;
     const idToDelete = req.params.id;
     if (isLoggedIn) {
         const deleted = await req.context.models.Request.deleteOne({_id: idToDelete});
