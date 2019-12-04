@@ -66,7 +66,10 @@ router.post('/', function _callee2(req, res) {
             year: new Date(request.release_date).getFullYear(),
             status: 'pending',
             timestamp: new Date(),
-            mediatype: request.media_type
+            mediatype: request.media_type,
+            backdrop_path: request.backdrop_path,
+            poster_path: request.poster_path,
+            overview: request.overview
           }));
 
         case 3:

@@ -6,7 +6,11 @@ const RequestSchema = new mongoose.Schema({
     year: String,
     status: String,
     timestamp: Object,
-    mediatype: String
+    mediatype: String,
+    backdrop_path: String,
+    poster_path: String,
+    overview: String
+
 }, {
     collection: 'requests'
 });
