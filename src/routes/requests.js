@@ -52,6 +52,17 @@ router.get('/update', async (req, res) => {
     }
 });
 
+router.put('/:id', async(req, res) => {
+    const id = req.params.id;
+    const filter = {_id: id};
+    const update = req.body;
+    let match = req.context.models.Request.findOneAndUpdate(filter, update, {useFindAndModify: false, new: true}, (err, result) => {
+        if(err) console.error(err);
+        console.log(result);
+    });
+    return res.status(200).send({status: 'ok'})
+});
+
 router.delete('/:id', async (req, res) => {
     const isLoggedIn = req.body.admin === process.env.ADMIN_TOKEN;
     const idToDelete = req.params.id;
