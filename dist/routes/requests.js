@@ -62,8 +62,8 @@ router.post('/', function _callee2(req, res) {
           _context2.next = 3;
           return _regenerator["default"].awrap(req.context.models.Request.create({
             _id: request.id,
-            movie_name: request.title,
-            year: new Date(request.release_date).getFullYear(),
+            movie_name: request.title || request.name,
+            year: new Date(request.release_date || request.first_air_date).getFullYear(),
             status: 'pending',
             timestamp: new Date(),
             mediatype: request.media_type,
