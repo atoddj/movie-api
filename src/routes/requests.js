@@ -35,14 +35,20 @@ router.get('/update', async (req, res) => {
     let found = []
     requests.forEach((r) => {
         let plexDb = req.context.connectSql();
-        const stmt = plexDb.prepare(`SELECT title FROM metadata_items
-        WHERE title = ? AND year = ?`);
-        let availableMatch = stmt.get(r.movie_name, r.year);
+        const stmt = plexDb.prepare(`SELECT title, year, guid FROM metadata_items
+        WHERE title = ? AND duration IS NOT NULL`);
+        let availableMatch = stmt.get(r.movie_name);
         plexDb.close();
         if (availableMatch) {
-            r.status = 'complete';
-            r.save();
-            found = [...found, availableMatch];
+            const regex = /themoviedb:\/\/(.*)\?/gm;
+            let match = regex.exec(availableMatch.guid);
+            let group = match ? match[1] : null;
+            if (r.year === availableMatch.year || group === r._id) {
+                // if match in the plexdb by title, check against the stored year or check against the tmdb id
+                r.status = 'complete';
+                r.save();
+                found = [...found, availableMatch];    
+            }
         }
     });
     if (found.length > 0) {   
