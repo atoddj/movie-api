@@ -43,7 +43,7 @@ router.get('/', function _callee2(req, res) {
           tmdbRes = _context2.sent;
           _context2.next = 6;
           return _regenerator["default"].awrap(Promise.all(tmdbRes.data.results.map(function _callee(tmdb) {
-            var pendingMatch, plexDb, stmt, year, availableMatch, _stmt, _year, _availableMatch, seasons;
+            var pendingMatch, plexDb, stmt, year, availableMatch, regex, match, group, _stmt, _year, _availableMatch, seasons;
 
             return _regenerator["default"].async(function _callee$(_context) {
               while (1) {
@@ -58,18 +58,28 @@ router.get('/', function _callee2(req, res) {
                     pendingMatch = _context.sent;
 
                     if (!tmdb.title) {
-                      _context.next = 11;
+                      _context.next = 15;
                       break;
                     }
 
                     plexDb = req.context.connectSql();
-                    stmt = plexDb.prepare("SELECT title FROM metadata_items\n                WHERE title = ? AND year = ?");
+                    stmt = plexDb.prepare("SELECT title, guid, year FROM metadata_items\n                WHERE title = ? AND duration IS NOT NULL");
                     year = Number(new Date(tmdb.release_date).getFullYear());
-                    availableMatch = stmt.get(tmdb.title, year);
+                    availableMatch = stmt.get(tmdb.title);
                     plexDb.close();
 
                     if (!availableMatch) {
-                      _context.next = 11;
+                      _context.next = 15;
+                      break;
+                    }
+
+                    // if match is found with title, parse the guid for tmdbid and use as fallback comparison
+                    regex = /themoviedb:\/\/(.*)\?/gm;
+                    match = regex.exec(availableMatch.guid);
+                    group = match ? match[1] : null;
+
+                    if (!(availableMatch.year === year || Number(group) === tmdb.id)) {
+                      _context.next = 15;
                       break;
                     }
 
@@ -77,9 +87,9 @@ router.get('/', function _callee2(req, res) {
                       status: 'Available'
                     }));
 
-                  case 11:
+                  case 15:
                     if (!tmdb.name) {
-                      _context.next = 24;
+                      _context.next = 28;
                       break;
                     }
 
@@ -89,7 +99,7 @@ router.get('/', function _callee2(req, res) {
                     _availableMatch = _stmt.get(tmdb.name, _year);
 
                     if (!_availableMatch) {
-                      _context.next = 23;
+                      _context.next = 27;
                       break;
                     }
 
@@ -105,12 +115,12 @@ router.get('/', function _callee2(req, res) {
                       seasons: seasons
                     }));
 
-                  case 23:
+                  case 27:
                     plexDb.close();
 
-                  case 24:
+                  case 28:
                     if (!pendingMatch) {
-                      _context.next = 26;
+                      _context.next = 30;
                       break;
                     }
 
@@ -118,10 +128,10 @@ router.get('/', function _callee2(req, res) {
                       status: pendingMatch.status
                     }));
 
-                  case 26:
+                  case 30:
                     return _context.abrupt("return", tmdb);
 
-                  case 27:
+                  case 31:
                   case "end":
                     return _context.stop();
                 }

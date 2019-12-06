@@ -103,14 +103,21 @@ router.get('/update', function _callee3(req, res) {
           found = [];
           requests.forEach(function (r) {
             var plexDb = req.context.connectSql();
-            var stmt = plexDb.prepare("SELECT title FROM metadata_items\n        WHERE title = ? AND year = ?");
-            var availableMatch = stmt.get(r.movie_name, r.year);
+            var stmt = plexDb.prepare("SELECT title, year, guid FROM metadata_items\n        WHERE title = ? AND duration IS NOT NULL");
+            var availableMatch = stmt.get(r.movie_name);
             plexDb.close();
 
             if (availableMatch) {
-              r.status = 'complete';
-              r.save();
-              found = [].concat((0, _toConsumableArray2["default"])(found), [availableMatch]);
+              var regex = /themoviedb:\/\/(.*)\?/gm;
+              var match = regex.exec(availableMatch.guid);
+              var group = match ? match[1] : null;
+
+              if (r.year === availableMatch.year || group === r._id) {
+                // if match in the plexdb by title, check against the stored year or check against the tmdb id
+                r.status = 'complete';
+                r.save();
+                found = [].concat((0, _toConsumableArray2["default"])(found), [availableMatch]);
+              }
             }
           });
 
@@ -134,58 +141,87 @@ router.get('/update', function _callee3(req, res) {
     }
   });
 });
-router["delete"]('/:id', function _callee4(req, res) {
-  var isLoggedIn, idToDelete, deleted;
+router.put('/:id', function _callee4(req, res) {
+  var id, filter, update, match;
   return _regenerator["default"].async(function _callee4$(_context4) {
     while (1) {
       switch (_context4.prev = _context4.next) {
+        case 0:
+          id = req.params.id;
+          filter = {
+            _id: id
+          };
+          update = req.body;
+          match = req.context.models.Request.findOneAndUpdate(filter, update, {
+            useFindAndModify: false,
+            "new": true
+          }, function (err, result) {
+            if (err) console.error(err);
+            console.log(result);
+          });
+          return _context4.abrupt("return", res.status(200).send({
+            status: 'ok'
+          }));
+
+        case 5:
+        case "end":
+          return _context4.stop();
+      }
+    }
+  });
+});
+router["delete"]('/:id', function _callee5(req, res) {
+  var isLoggedIn, idToDelete, deleted;
+  return _regenerator["default"].async(function _callee5$(_context5) {
+    while (1) {
+      switch (_context5.prev = _context5.next) {
         case 0:
           isLoggedIn = req.body.admin === process.env.ADMIN_TOKEN;
           idToDelete = req.params.id;
 
           if (!isLoggedIn) {
-            _context4.next = 13;
+            _context5.next = 13;
             break;
           }
 
-          _context4.next = 5;
+          _context5.next = 5;
           return _regenerator["default"].awrap(req.context.models.Request.deleteOne({
             _id: idToDelete
           }));
 
         case 5:
-          deleted = _context4.sent;
+          deleted = _context5.sent;
 
           if (!(deleted.deletedCount === 1)) {
-            _context4.next = 10;
+            _context5.next = 10;
             break;
           }
 
-          return _context4.abrupt("return", res.send({
+          return _context5.abrupt("return", res.send({
             deleted: true,
             message: "deleted entry where _id = ".concat(idToDelete)
           }));
 
         case 10:
-          return _context4.abrupt("return", res.send({
+          return _context5.abrupt("return", res.send({
             status: 'ERROR',
             message: "id ".concat(idToDelete, " not found in database"),
             deleted: false
           }));
 
         case 11:
-          _context4.next = 14;
+          _context5.next = 14;
           break;
 
         case 13:
-          return _context4.abrupt("return", res.send({
+          return _context5.abrupt("return", res.send({
             status: 'ERROR',
             message: 'Authentication failed'
           }));
 
         case 14:
         case "end":
-          return _context4.stop();
+          return _context5.stop();
       }
     }
   });
