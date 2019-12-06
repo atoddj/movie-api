@@ -16,13 +16,19 @@ router.get('/', async (req, res) => {
             let plexDb;
             if (tmdb.title) {
                 plexDb= req.context.connectSql();
-                const stmt = plexDb.prepare(`SELECT title FROM metadata_items
-                WHERE title = ? AND year = ?`);
+                const stmt = plexDb.prepare(`SELECT title, guid, year FROM metadata_items
+                WHERE title = ? AND duration IS NOT NULL`);
                 const year = Number(new Date(tmdb.release_date).getFullYear());
-                let availableMatch = stmt.get(tmdb.title, year);
+                let availableMatch = stmt.get(tmdb.title);
                 plexDb.close();
-                if (availableMatch) {    
-                    return {...tmdb, status: 'Available'}
+                if (availableMatch) {
+                    // if match is found with title, parse the guid for tmdbid and use as fallback comparison
+                    const regex = /themoviedb:\/\/(.*)\?/gm;
+                    let match = regex.exec(availableMatch.guid);
+                    let group = match ? match[1] : null;
+                    if (availableMatch.year === year || Number(group) === tmdb.id) {
+                        return {...tmdb, status: 'Available'}
+                    }
                 }
             }
             if (tmdb.name) {
