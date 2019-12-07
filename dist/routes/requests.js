@@ -112,7 +112,7 @@ router.get('/update', function _callee3(req, res) {
               var match = regex.exec(availableMatch.guid);
               var group = match ? match[1] : null;
 
-              if (r.year === availableMatch.year || group === r._id) {
+              if (Number(r.year) === availableMatch.year || group === r._id) {
                 // if match in the plexdb by title, check against the stored year or check against the tmdb id
                 r.status = 'complete';
                 r.save();
