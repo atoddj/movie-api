@@ -43,7 +43,7 @@ router.get('/update', async (req, res) => {
             const regex = /themoviedb:\/\/(.*)\?/gm;
             let match = regex.exec(availableMatch.guid);
             let group = match ? match[1] : null;
-            if (r.year === availableMatch.year || group === r._id) {
+            if (Number(r.year) === availableMatch.year || group === r._id) {
                 // if match in the plexdb by title, check against the stored year or check against the tmdb id
                 r.status = 'complete';
                 r.save();
