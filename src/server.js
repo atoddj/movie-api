@@ -25,6 +25,7 @@ app.use('/api/requests', routes.requests);
 app.use('/api/search', routes.search);
 app.use('/api/auth', routes.session);
 app.use('/api/plex/latest', routes.latest);
+app.use('/api/tv', routes.tv);
 
 connectDb().then(async () => {
     app.listen(process.env.PORT, () => {
